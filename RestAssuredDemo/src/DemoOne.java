@@ -26,7 +26,7 @@ public class DemoOne {
 				.and()
 				.body("results[0].place_id",
 						equalTo("ChIJP3Sa8ziYEmsRUKgyFmh9AQM")).and()
-				.header("Server", "pablo");
+				.header("Server", "scaffolding on HTTPServer2");
 
 	}
 

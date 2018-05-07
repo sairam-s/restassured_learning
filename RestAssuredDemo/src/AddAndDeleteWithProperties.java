@@ -2,7 +2,6 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -14,13 +13,15 @@ import io.restassured.response.Response;
 import org.junit.Before;
 import org.junit.Test;
 
+import file.Resources;
+
 public class AddAndDeleteWithProperties {
 	Properties prop = new Properties();
 
 	@Before
 	public void getProperties() throws IOException {
 		FileInputStream fis = new FileInputStream(
-				"/Users/sairams/Project/RestProject/restassured_learning/RestAssuredDemo/src/file/default.properties");
+				"E:\\Project\\restassured_learning\\RestAssuredDemo\\src\\file\\default.properties");
 		prop.load(fis);
 
 	}
@@ -41,19 +42,18 @@ public class AddAndDeleteWithProperties {
 				+ "\"language\": \"en-AU\"" + "}";
 
 		RestAssured.baseURI = prop.getProperty("HOST");
-		;
 		Response res = given()
 				.queryParam("key", prop.getProperty("KEY"))
-				.body(BODY).when().post("maps/api/place/add/json").then()
+				.body(BODY).when().post(Resources.getAddContext()).then()
 				.assertThat().statusCode(200).and()
 				.contentType(ContentType.JSON).and()
 				.body("status", equalTo("OK")).extract().response();
 		String reponseString = res.asString();
 		JsonPath jp = new JsonPath(reponseString);
 		String placeId = jp.get("place_id");
-		given().queryParam("key", "AIzaSyAFUkh5n2qrNpoRFHHiUuph_UqEoiETGUM")
+		given().queryParam("key", prop.getProperty("KEY"))
 				.body("{" + "\"place_id\":\"" + placeId + "\"" + "}").when()
-				.post("/maps/api/place/delete/json").then().assertThat()
+				.post(Resources.getDeleteContext()).then().assertThat()
 				.statusCode(200).contentType(ContentType.JSON).and()
 				.body("status", equalTo("OK"));
 

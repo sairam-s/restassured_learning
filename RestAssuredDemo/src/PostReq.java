@@ -1,10 +1,11 @@
 import static io.restassured.RestAssured.given;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.Test;
+
+import file.Resources;
 
 public class PostReq {
 
@@ -24,7 +25,7 @@ public class PostReq {
 						+ "\"types\": [\"shoe_store\"],"
 						+ "\"website\": \"http://www.google.com.au/\","
 						+ "\"language\": \"en-AU\"" + "}").when()
-				.post("maps/api/place/add/json").then().assertThat()
+				.post(Resources.getAddContext()).then().assertThat()
 				.statusCode(200).and().contentType(ContentType.JSON).and()
 				.body("status", equalTo("OK"));
 	}
